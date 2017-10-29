@@ -28,16 +28,16 @@ import com.evernote.edam.type.ResourceAttributes;
  * @author hui.zhao.cfs
  *
  */
-public class EvernoteApi {
+public class EvernoteAction {
 
-	private static Logger logger = LoggerFactory.getLogger(EvernoteApi.class);
+	private static Logger logger = LoggerFactory.getLogger(EvernoteAction.class);
 
 	private UserStoreClient userStore;
 	private NoteStoreClient noteStore;
 	private String newNoteGuid;
 
-	public EvernoteApi(String token) throws Exception {
-		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.SANDBOX, token);
+	public EvernoteAction(String token) throws Exception {
+		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.YINXIANG, token);
 		ClientFactory factory = new ClientFactory(evernoteAuth);
 		userStore = factory.createUserStoreClient();
 
@@ -89,7 +89,6 @@ public class EvernoteApi {
 
 		String content = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 				+ "<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">" + "<en-note>"
-				+ "<span style=\"color:green;\">Here's the Evernote logo:</span><br/>"
 				+ "<en-media type=\"image/png\" hash=\"" + hashHex + "\"/>" + "</en-note>";
 		note.setContent(content);
 
@@ -107,7 +106,7 @@ public class EvernoteApi {
 	 */
 	private Notebook getCurrentNotebook() throws Exception {
 		List<Notebook> bookList = getAllNotebooks();
-		String hostName = getHostName();
+		String hostName = "[剪贴板]"+getHostName();
 		for (Notebook notebook : bookList) {
 			if (hostName.equals(notebook.getName())) {
 				return notebook;

@@ -9,7 +9,9 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -29,11 +31,13 @@ public class ClipboardMonitor implements ClipboardOwner {
 
 	private static Logger logger = LoggerFactory.getLogger(ClipboardMonitor.class);
 
-	private static final String AUTH_TOKEN = "S=s1:U=941fa:E=166a8ec927b:C=15f513b6580:P=81:A=ksfzhaohui:V=2:H=208abbcc7d6cf656bbb3c7ea574dd140";
+	private static String AUTH_TOKEN;
 
 	public ClipboardMonitor() throws Exception {
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(clipboard.getContents(null), this);
+
+		AUTH_TOKEN = readAccessToken();
 	}
 
 	/**
@@ -42,7 +46,7 @@ public class ClipboardMonitor implements ClipboardOwner {
 	@Override
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 		try {
-			EvernoteApi evernoteApi = new EvernoteApi(AUTH_TOKEN);
+			EvernoteAction evernoteApi = new EvernoteAction(AUTH_TOKEN);
 			// 延迟一段时间，防止剪贴板正在使用
 			Thread.sleep(200);
 			if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
@@ -83,5 +87,24 @@ public class ClipboardMonitor implements ClipboardOwner {
 		} catch (Exception e) {
 			logger.error("lostOwnership error", e);
 		}
+	}
+
+	private static String readAccessToken() {
+		DataInputStream input = null;
+		String accessToken = null;
+		try {
+			input = new DataInputStream(new FileInputStream("accessToken"));
+			accessToken = input.readUTF();
+		} catch (IOException e) {
+			logger.error("read error", e);
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+		return accessToken;
 	}
 }
