@@ -15,7 +15,10 @@ public abstract class AbstractAuth {
 
 	static Logger logger = LoggerFactory.getLogger(AbstractAuth.class);
 
+	/** 用户授权之后的回调地址，将verifier存储 **/
 	static String CALL_BACK_URL = "http://codingo.xyz:8080/Clipboard-Web/writeVerifier?mac=";
+
+	/** API Key相关信息 **/
 	static final String CONSUMER_KEY = "ksfzhaohui";
 	static final String CONSUMER_SECRET = "7c6b257f1fc99a85";
 

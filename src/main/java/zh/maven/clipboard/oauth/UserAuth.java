@@ -8,6 +8,12 @@ import org.scribe.model.Token;
 
 import com.evernote.auth.EvernoteService;
 
+/**
+ * 用户手动授权认证
+ * 
+ * @author hui.zhao.cfs
+ *
+ */
 public class UserAuth extends AbstractAuth {
 
 	private static String requestToken;

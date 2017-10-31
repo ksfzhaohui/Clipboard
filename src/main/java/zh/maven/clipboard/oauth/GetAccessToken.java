@@ -22,6 +22,7 @@ import com.evernote.auth.EvernoteService;
 
 public class GetAccessToken extends AbstractAuth {
 
+	/** 获取verifier地址 **/
 	private static String GET_VERIFIER_URL = "http://codingo.xyz:8080/Clipboard-Web/getVerifier?mac=";
 
 	/**
@@ -41,7 +42,7 @@ public class GetAccessToken extends AbstractAuth {
 			Token scribeAccessToken = service.getAccessToken(scribeRequestToken, scribeVerifier);
 			EvernoteAuth evernoteAuth = EvernoteAuth.parseOAuthResponse(EvernoteService.YINXIANG,
 					scribeAccessToken.getRawResponse());
-			System.out.println(evernoteAuth.getToken());
+			logger.info("accessToken = " + evernoteAuth.getToken());
 			writeAccessToken(evernoteAuth.getToken());
 		} catch (Exception e) {
 			logger.error("getAccessToken error", e);
